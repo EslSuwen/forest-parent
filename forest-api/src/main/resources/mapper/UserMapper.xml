@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.one2rich.forest.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="cn.one2rich.forest.entity.User">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="idUser"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="real_name" property="realName"/>
+        <result column="sex" property="sex"/>
+        <result column="avatar_type" property="avatarType"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+    <resultMap id="UserInfoResultMapper" type="cn.one2rich.forest.dto.UserInfoDTO">
+        <result column="id" property="idUser"/>
+        <result column="account" property="account"/>
+        <result column="nickname" property="nickname"/>
+        <result column="sex" property="sex"/>
+        <result column="avatar_type" property="avatarType"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="signature" property="signature"/>
+    </resultMap>
+    <resultMap id="DTOResultMapper" type="cn.one2rich.forest.dto.UserDTO">
+        <result column="id" property="idUser"/>
+        <result column="account" property="account"/>
+        <result column="nickname" property="nickname"/>
+        <result column="avatar_type" property="avatarType"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="signature" property="signature"/>
+    </resultMap>
+    <resultMap id="AuthorResultMap" type="cn.one2rich.forest.dto.Author">
+        <result column="id" property="idUser"/>
+        <result column="nickname" property="userNickname"/>
+        <result column="avatar_url" property="userAvatarURL"/>
+    </resultMap>
+    <insert id="insertUserRole">
+        insert into forest_user_role (id_user, id_role, created_time)
+        values (#{idUser}, #{idRole}, sysdate())
+    </insert>
+    <update id="updatePasswordByAccount">
+        update forest_user
+        set password = #{password}
+        where account = #{account}
+    </update>
+    <update id="updateUserRole">
+        update forest_user_role
+        set id_role      = #{idRole},
+            created_time = sysdate()
+        where id_user = #{idUser}
+    </update>
+    <update id="updateStatus">
+        update forest_user
+        set status = #{status}
+        where id = #{idUser}
+    </update>
+    <update id="updateUserInfo">
+        update forest_user set nickname = #{nickname},email = #{email},signature = #{signature},avatar_type =
+        #{avatarType},avatar_url = #{avatarUrl},sex = #{sex}
+        <if test="phone != null and phone != ''">
+            ,phone = #{phone}
+        </if>
+        where id = #{idUser}
+    </update>
+    <update id="updateLastLoginTime">
+        update forest_user
+        set last_login_time = sysdate()
+        where id = #{idUser}
+    </update>
+    <update id="updateEmail">
+        update forest_user
+        set email = #{email}
+        where id = #{idUser}
+    </update>
+    <update id="updatePasswordById">
+        update forest_user
+        set password = #{password}
+        where id = #{idUser}
+    </update>
+
+    <select id="findByAccount" resultMap="BaseResultMap">
+        select id, nickname, account, password, status, avatar_type, avatar_url
+        from forest_user
+        where (account = #{account} or email = #{account})
+          and status = 0
+    </select>
+    <select id="findUserInfoByAccount" resultMap="UserInfoResultMapper">
+        select id,
+               nickname,
+               sex,
+               avatar_type,
+               avatar_url,
+               email,
+               phone,
+               account,
+               status,
+               signature,
+               last_login_time
+        from forest_user
+        where account = #{account}
+    </select>
+    <select id="selectUserDTOByNickname" resultMap="DTOResultMapper">
+        select id, nickname, avatar_type, avatar_url, account, signature
+        from forest_user
+        where nickname = #{nickname}
+          and status = 0
+    </select>
+    <select id="selectRoleWeightsByUser" resultType="java.lang.Integer">
+        select vr.weights
+        from forest_role vr
+                 left join forest_user_role vur on vr.id = vur.id_role
+        where vur.id_user = #{idUser}
+    </select>
+    <select id="selectCountByNickName" resultType="java.lang.Integer">
+        select count(*)
+        from forest_user
+        where nickname = #{nickname}
+    </select>
+    <select id="selectUserInfo" resultMap="UserInfoResultMapper">
+        select id,
+               nickname,
+               sex,
+               avatar_type,
+               avatar_url,
+               email,
+               phone,
+               account,
+               status,
+               signature,
+               last_login_time
+        from forest_user
+        where id = #{idUser}
+    </select>
+    <select id="checkNicknameByIdUser" resultType="java.lang.Integer">
+        select count(*)
+        from forest_user
+        where nickname = #{nickname}
+          and id != #{idUser}
+    </select>
+    <select id="selectAuthor" resultMap="AuthorResultMap">
+        select *
+        from forest_user
+        where id = #{id}
+    </select>
+
+</mapper>

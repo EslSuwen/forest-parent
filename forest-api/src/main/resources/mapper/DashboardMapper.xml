@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.one2rich.forest.mapper.DashboardMapper">
+    <resultMap id="DashboardDataResultMap" type="cn.one2rich.forest.dto.admin.DashboardData">
+        <result column="label" property="label"></result>
+        <result column="value" property="value"></result>
+    </resultMap>
+    <select id="selectUserCount" resultType="java.lang.Integer">
+        select count(*)
+        from forest_user
+    </select>
+    <select id="selectNewUserCount" resultType="java.lang.Integer">
+        select count(*)
+        from forest_user
+        where created_time > str_to_date(date_format(sysdate(), '%Y-%m-%d'), '%Y-%m-%d')
+    </select>
+    <select id="selectArticleCount" resultType="java.lang.Integer">
+        select count(*)
+        from forest_article
+    </select>
+    <select id="selectNewArticleCount" resultType="java.lang.Integer">
+        select count(*)
+        from forest_article
+        where created_time > str_to_date(date_format(sysdate(), '%Y-%m-%d'), '%Y-%m-%d')
+          and article_status = 0
+    </select>
+    <select id="selectCountViewNum" resultType="java.lang.Integer">
+        select count(*)
+        from forest_visit
+    </select>
+    <select id="selectTodayViewNum" resultType="java.lang.Integer">
+        select count(*)
+        from forest_visit
+        where created_time > str_to_date(date_format(sysdate(), '%Y-%m-%d'), '%Y-%m-%d')
+    </select>
+    <select id="selectLastThirtyDaysArticleData" resultMap="DashboardDataResultMap">
+        select COUNT(*) as value, date_format(created_time, '%Y-%m-%d') as label
+        from forest_article
+        where created_time
+            > str_to_date(date_format(date_sub(sysdate()
+            , interval + 30 day)
+            , '%Y-%m-%d')
+            , '%Y-%m-%d')
+          and article_status = 0
+        GROUP BY date_format(created_time, '%Y-%m-%d')
+    </select>
+    <select id="selectLastThirtyDaysUserData" resultMap="DashboardDataResultMap">
+        select COUNT(*) as value, date_format(created_time, '%Y-%m-%d') as label
+        from forest_user
+        where created_time > str_to_date(date_format(date_sub(sysdate(), interval + 30 day), '%Y-%m-%d'), '%Y-%m-%d')
+        GROUP BY date_format(created_time, '%Y-%m-%d')
+    </select>
+    <select id="selectLastThirtyDaysVisitData" resultMap="DashboardDataResultMap">
+        select COUNT(*) as value, date_format(created_time, '%Y-%m-%d') as label
+        from forest_visit
+        where created_time > str_to_date(date_format(date_sub(sysdate(), interval + 30 day), '%Y-%m-%d'), '%Y-%m-%d')
+        GROUP BY date_format(created_time, '%Y-%m-%d')
+    </select>
+    <select id="selectHistoryArticleData" resultMap="DashboardDataResultMap">
+        select COUNT(*) as value, date_format(created_time, '%Y-%m') as label
+        from forest_article
+        where created_time
+            > str_to_date(date_format(date_sub(sysdate()
+            , interval + 1 year)
+            , '%Y-%m-%d')
+            , '%Y-%m-%d')
+          and article_status = 0
+        GROUP BY date_format(created_time, '%Y-%m')
+    </select>
+    <select id="selectHistoryUserData" resultMap="DashboardDataResultMap">
+        select COUNT(*) as value, date_format(created_time, '%Y-%m') as label
+        from forest_user
+        where created_time > str_to_date(date_format(date_sub(sysdate(), interval + 1 year), '%Y-%m-%d'), '%Y-%m-%d')
+        GROUP BY date_format(created_time, '%Y-%m')
+    </select>
+    <select id="selectHistoryVisitData" resultMap="DashboardDataResultMap">
+        select COUNT(*) as value, date_format(created_time, '%Y-%m') as label
+        from forest_visit
+        where created_time > str_to_date(date_format(date_sub(sysdate(), interval + 1 year), '%Y-%m-%d'), '%Y-%m-%d')
+        GROUP BY date_format(created_time, '%Y-%m')
+    </select>
+</mapper>

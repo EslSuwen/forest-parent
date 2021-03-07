@@ -29,16 +29,16 @@ import java.util.List;
 public class DefaultConfig implements Configuration {
 
   /** 分词器默认字典路径 */
-  private static final String PATH_DIC_MAIN = "cn/one2rich/forest/lucene/main2012.dic";
+  private static final String PATH_DIC_MAIN = "lucene/main2012.dic";
   /** 题词字典路径 */
-  private static final String PATH_DIC_QUANTIFIER = "cn/one2rich/forest/lucene/quantifier.dic";
+  private static final String PATH_DIC_QUANTIFIER = "lucene/quantifier.dic";
   /** 用户自定义字典路径 */
   private static final String PATH_USER_DIC =
-      System.getProperty("user.dir") + "/cn/one2rich/forest/lucene/userDic/userDic.dic";
+      System.getProperty("user.dir") + "/lucene/userDic/userDic.dic";
   /** 配置属性——扩展字典 */
-  private String extDic = "cn/one2rich/forest/lucene/ext.dic;" + PATH_USER_DIC;
+  private String extDic = "lucene/ext.dic;" + PATH_USER_DIC;
   /** 配置属性——扩展停止词典 */
-  private String extStopword = "cn/one2rich/forest/lucene/stopword.dic";
+  private String extStopword = "lucene/stopword.dic";
   /** 是否使用smart方式分词 */
   private boolean useSmart;
 

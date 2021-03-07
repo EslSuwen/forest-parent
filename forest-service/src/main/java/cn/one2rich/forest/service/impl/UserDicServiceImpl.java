@@ -57,7 +57,7 @@ public class UserDicServiceImpl extends ServiceImpl<UserDicMapper, UserDic>
   @Override
   public void writeUserDic() {
     try {
-      String filePath = "cn/one2rich/forest/lucene/userDic/";
+      String filePath = "lucene/userDic/";
       File file = new File(filePath);
       if (!file.exists()) {
         file.mkdirs();

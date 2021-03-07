@@ -9,6 +9,7 @@ import cn.one2rich.forest.service.UserDicService;
 import cn.one2rich.forest.util.ArticleIndexUtil;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -29,7 +30,7 @@ public class LuceneSearchController {
   @Resource private LuceneService luceneService;
   @Resource private UserDicService dicService;
 
-  // @PostConstruct  TODO 测试关闭启动创建索引
+  @PostConstruct
   public void createIndex() {
     // 删除系统运行时保存的索引，重新创建索引
     ArticleIndexUtil.deleteAllIndex();

@@ -47,7 +47,7 @@ public class LuceneServiceImpl extends ServiceImpl<ArticleLuceneMapper, ArticleL
   @Resource private ArticleLuceneMapper luceneMapper;
 
   /** Lucene索引文件路径 */
-  private final String indexPath = "cn/one2rich/forest/lucene/index";
+  private final String indexPath = "lucene/index";
 
   /**
    * 将文章的数据解析为一个个关键字词存储到索引文件中

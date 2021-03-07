@@ -20,11 +20,11 @@ import java.util.Arrays;
 public class ArticleIndexUtil {
 
   /** lucene索引保存目录 */
-  private static final String PATH = System.getProperty("user.dir") + "/cn/one2rich/forest/lucene/index";
+  private static final String PATH = System.getProperty("user.dir") + "/lucene/index";
 
   /** 系统运行时索引保存目录 */
   private static final String INDEX_PATH =
-      System.getProperty("user.dir") + "/cn/one2rich/forest/lucene/index/index777";
+      System.getProperty("user.dir") + "/lucene/index/index777";
 
   /** 删除所有运行中保存的索引 */
   public static void deleteAllIndex() {

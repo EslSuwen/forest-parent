@@ -41,7 +41,7 @@ public class Dictionary {
   private DictSegment _QuantifierDict;
   /** 用户自定义词典路径 */
   private static final String PATH_USER_DIC =
-      System.getProperty("user.dir") + "/cn/one2rich/forest/lucene/userDic/userDic.dic";
+      System.getProperty("user.dir") + "lucene/userDic/userDic.dic";
   /** 配置对象 */
   private final Configuration cfg;
 

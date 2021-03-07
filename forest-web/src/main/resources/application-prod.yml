@@ -64,21 +64,3 @@ wx:
         token: #微信小程序消息服务器配置的 token
         aesKey: #微信小程序消息服务器配置的 EncodingAESKey
         msgDataFormat: JSON
-env: dev
-#第三方登录
-justauth:
-  enabled: true
-  type:
-    GITLAB:
-      client-id: ac02d296205b1e36faa01a86ac511e55fbc875b57f3f093a475119c41f614929
-      client-secret: e7aca5dc9115dc6fdc23b59cd04e88bc72c838159897a1cda9938e30215d405b
-      redirect-uri: http://10.26.201.17:32241/forest/api/thirdLogin/gitlab/callback
-  cache:
-    type: default
-    prefix: 'NEBULA::THIRD_LOGIN'
-    timeout: 1h
-third:
-  authorize: http://10.26.201.103:9000/oauth/authorize
-  accessToken: http://10.26.201.103:9000/oauth/token
-  userInfo: http://10.26.201.103:9000/api/v4/user
-  loginCallBackUrl: http://10.26.201.17:32240/login?

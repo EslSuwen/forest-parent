@@ -19,9 +19,9 @@ spring:
         max-idle: 500
         min-idle: 0
   datasource:
-    url: jdbc:mysql://47.115.8.44:3306/forest?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://localhost:3306/forest?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: Liyu8824
+    password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
     resources:
       add-mappings: true

@@ -10,6 +10,10 @@ public class TopicDTO {
 
   private Integer idTopic;
 
+  private Integer pid;
+
+  private Boolean isLeaf;
+
   private String topicTitle;
 
   private String topicUri;

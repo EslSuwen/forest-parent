@@ -1,9 +1,5 @@
 package cn.one2rich.forest.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.one2rich.forest.dto.admin.TopicDTO;
 import cn.one2rich.forest.dto.admin.TopicTagDTO;
 import cn.one2rich.forest.dto.result.Result;
@@ -11,11 +7,14 @@ import cn.one2rich.forest.entity.Tag;
 import cn.one2rich.forest.entity.Topic;
 import cn.one2rich.forest.mapper.TopicMapper;
 import cn.one2rich.forest.service.TopicService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -23,11 +22,28 @@ import java.util.List;
 @Service
 public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements TopicService {
 
-  @Resource private TopicMapper topicMapper;
-
   @Override
   public List<Topic> findTopicNav() {
-    return topicMapper.selectTopicNav();
+    LambdaQueryWrapper<Topic> wrapper = new LambdaQueryWrapper<>();
+    wrapper.eq(Topic::getPid, 0).or().isNull(Topic::getPid).orderByDesc(Topic::getTopicSort);
+    // 得到一级节点资源列表
+    List<Topic> topicNavList = list(wrapper);
+    if (!topicNavList.isEmpty()) {
+      topicNavList.forEach(this::findAllChild);
+    }
+    return topicNavList;
+  }
+
+  public void findAllChild(Topic topic) {
+    LambdaQueryWrapper<Topic> wrapper =
+        new LambdaQueryWrapper<Topic>()
+            .eq(Topic::getPid, topic.getIdTopic())
+            .orderByDesc(Topic::getTopicSort);
+    List<Topic> childList = list(wrapper);
+    topic.setChildren(childList);
+    if (!childList.isEmpty()) {
+      childList.forEach(this::findAllChild);
+    }
   }
 
   @Override
@@ -61,7 +77,7 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
       save(newTopic);
     } else {
       topic.setCreatedTime(new Date());
-      topicMapper.update(
+      baseMapper.update(
           topic.getIdTopic(),
           topic.getTopicTitle(),
           topic.getTopicUri(),

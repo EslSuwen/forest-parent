@@ -9,8 +9,9 @@ import cn.one2rich.forest.jwt.def.JwtConstants;
 import cn.one2rich.forest.util.FileUtils;
 import cn.one2rich.forest.util.UserUtils;
 import cn.one2rich.forest.util.Utils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileCopyUtils;
@@ -31,6 +32,7 @@ import java.util.*;
  *
  * @author ronger
  */
+@Api(value = "文件上传", tags = "文件上传")
 @Log4j2
 @RestController
 @RequestMapping("/api/upload")
@@ -43,6 +45,7 @@ public class UploadController {
   private static final String UPLOAD_URL = "/api/upload/file/batch";
   private static final String LINK_TO_IMAGE_URL = "/api/upload/file/link";
 
+  @ApiOperation("单文件上传")
   @PostMapping("/file")
   public Result<?> uploadPicture(
       @RequestParam(value = "file", required = false) MultipartFile multipartFile,
@@ -71,6 +74,7 @@ public class UploadController {
     return Result.OK(localPath + fileName);
   }
 
+  @ApiOperation("多文件上传")
   @PostMapping("/file/batch")
   public Object batchFileUpload(
       @RequestParam(value = "file[]", required = false) MultipartFile[] multipartFiles,
@@ -129,20 +133,7 @@ public class UploadController {
     return typePath;
   }
 
-  @GetMapping("/simple/token")
-  public Result<?> uploadSimpleToken(HttpServletRequest request) throws BaseApiException {
-    String authHeader = request.getHeader(JwtConstants.AUTHORIZATION);
-    if (StringUtils.isBlank(authHeader)) {
-      throw new BaseApiException(ErrorCode.UNAUTHORIZED);
-    }
-    TokenUser tokenUser = UserUtils.getTokenUser(authHeader);
-    Map<String, Object> map = new HashMap<>(2);
-    map.put("uploadToken", tokenUser.getToken());
-    map.put("uploadURL", UPLOAD_SIMPLE_URL);
-    map.put("linkToImageURL", LINK_TO_IMAGE_URL);
-    return Result.OK(map);
-  }
-
+  @ApiOperation("多文件上传token获取")
   @GetMapping("/token")
   public Result<Map<String, Object>> uploadToken(HttpServletRequest request)
       throws BaseApiException {
@@ -158,6 +149,7 @@ public class UploadController {
     return Result.OK(map);
   }
 
+  @ApiOperation("图片连接关联")
   @PostMapping("/file/link")
   public Result<Map<String, Object>> linkToImageUrl(
       @RequestBody LinkToImageUrlDTO linkToImageUrlDTO) throws IOException {

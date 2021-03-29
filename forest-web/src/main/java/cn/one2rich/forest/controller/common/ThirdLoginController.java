@@ -13,6 +13,7 @@ import cn.one2rich.forest.service.UserService;
 import cn.one2rich.forest.util.BeanCopierUtil;
 import cn.one2rich.forest.util.Utils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;

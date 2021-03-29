@@ -8,6 +8,8 @@ import cn.one2rich.forest.dto.result.Result;
 import cn.one2rich.forest.entity.User;
 import cn.one2rich.forest.service.NotificationService;
 import cn.one2rich.forest.util.UserUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -17,12 +19,14 @@ import javax.annotation.Resource;
  *
  * @author ronger
  */
+@Api(value = "消息通知", tags = "消息通知")
 @RestController
 @RequestMapping("/api/notification")
 public class NotificationController {
 
   @Resource private NotificationService notificationService;
 
+  @ApiOperation("用户消息分页信息")
   @GetMapping("/all")
   public Result<IPage<NotificationDTO>> notifications(
       @RequestParam(defaultValue = "0") Integer page,
@@ -33,6 +37,7 @@ public class NotificationController {
         notificationService.findNotifications(new Page<>(page, rows), user.getIdUser()));
   }
 
+  @ApiOperation("用户未读消息分页信息")
   @GetMapping("/unread")
   public Result<?> unreadNotification(
       @RequestParam(defaultValue = "0") Integer page,
@@ -43,6 +48,7 @@ public class NotificationController {
         notificationService.findUnreadNotifications(new Page<>(page, rows), user.getIdUser()));
   }
 
+  @ApiOperation("用户确定已读消息")
   @PutMapping("/read/{id}")
   public Result<?> read(@PathVariable Integer id) {
     Integer result = notificationService.readNotification(id);

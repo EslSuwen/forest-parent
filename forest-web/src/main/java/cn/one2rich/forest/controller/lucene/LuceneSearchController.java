@@ -1,12 +1,14 @@
 package cn.one2rich.forest.controller.lucene;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.one2rich.forest.dto.ArticleDTO;
-import cn.one2rich.forest.dto.result.Result;
 import cn.one2rich.forest.dto.ArticleLucene;
+import cn.one2rich.forest.dto.result.Result;
 import cn.one2rich.forest.service.LuceneService;
 import cn.one2rich.forest.service.UserDicService;
 import cn.one2rich.forest.util.ArticleIndexUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +25,7 @@ import java.util.concurrent.Executors;
  * @author suwen
  * @date 2021/2/3 10:41
  */
+@Api(value = "全文搜索", tags = "全文搜索")
 @RestController
 @RequestMapping("/api/lucene")
 public class LuceneSearchController {
@@ -59,6 +62,7 @@ public class LuceneSearchController {
    * @param q
    * @return
    */
+  @ApiOperation("全文关键字搜索")
   @GetMapping("/searchArticle/{q}")
   public Result<?> searchArticle(
       @PathVariable String q,

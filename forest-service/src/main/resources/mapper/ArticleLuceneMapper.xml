@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.one2rich.forest.mapper.ArticleLuceneMapper">
+    <resultMap id="BaseResultMap" type="cn.one2rich.forest.dto.ArticleLucene">
+        <id column="id" property="idArticle" jdbcType="INTEGER"/>
+        <result column="article_title" property="articleTitle" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="cn.one2rich.forest.dto.ArticleLucene" extends="BaseResultMap">
+        <result column="article_content" property="articleContent" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <resultMap id="DTOResultMap" type="cn.one2rich.forest.dto.ArticleDTO">
+        <result column="id" property="idArticle"/>
+        <result column="article_title" property="articleTitle"/>
+        <result column="article_thumbnail_url" property="articleThumbnailUrl"/>
+        <result column="article_author_id" property="articleAuthorId"/>
+        <result column="nickname" property="articleAuthorName"/>
+        <result column="avatar_url" property="articleAuthorAvatarUrl"/>
+        <result column="article_type" property="articleType"/>
+        <result column="article_tags" property="articleTags"/>
+        <result column="article_view_count" property="articleViewCount"/>
+        <result column="article_preview_content" property="articlePreviewContent"/>
+        <result column="article_content" property="articleContent"/>
+        <result column="comment_count" property="articleCommentCount"/>
+        <result column="time_ago" property="timeAgo"/>
+        <result column="article_permalink" property="articlePermalink"/>
+        <result column="article_link" property="articleLink"/>
+        <result column="article_status" property="articleStatus"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="sort_no" property="sortNo"/>
+        <result column="article_perfect" property="articlePerfect"/>
+        <result column="article_thumbs_up_count" property="articleThumbsUpCount"/>
+        <result column="article_sponsor_count" property="articleSponsorCount"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, article_title
+    </sql>
+    <sql id="Blob_Column_List">
+        article_content
+    </sql>
+    <select id="getAllArticleLucene" resultMap="ResultMapWithBLOBs">
+        select art.id, art.article_title, content.article_content
+        from forest_article art
+                     left join forest_article_content content on art.id = content.id_article;
+    </select>
+
+    <select id="getArticlesByIds" resultMap="DTOResultMap">
+        select art.*, su.nickname, su.avatar_url
+        from forest_article art
+                     join forest_user su on art.article_author_id = su.id
+                where article_status = 0
+                  and art.id in
+        <foreach collection="ids" item="id" index="index"
+                 open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        order by
+                field(art.id
+        <foreach collection="ids" item="id" index="index"
+                 open="," close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getById" resultMap="ResultMapWithBLOBs">
+        select art.id, art.article_title, content.article_content
+        from forest_article art
+                     left join forest_article_content content on art.id = content.id_article
+        where id = #{id};
+    </select>
+</mapper>
